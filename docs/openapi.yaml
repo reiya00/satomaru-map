@@ -1,0 +1,168 @@
+openapi: 3.0.3
+info:
+  title: Satomaru Map API
+  version: 0.2.0
+servers:
+  - url: https://api.satomaru.app
+
+components:
+  schemas:
+    Visibility:
+      type: string
+      enum: [personal, group, public]
+    LayerKey:
+      type: string
+      enum: [sumai, kurashi, manabi, asobi, other]
+    Pin:
+      type: object
+      required: [id, lat, lng, layer, tag, visibility, createdAt]
+      properties:
+        id: { type: string }
+        lat: { type: number, format: double }
+        lng: { type: number, format: double }
+        layer: { $ref: '#/components/schemas/LayerKey' }
+        tag: { type: string }
+        note: { type: string }
+        visibility: { $ref: '#/components/schemas/Visibility' }
+        group_id: { type: string, nullable: true }
+        status: { type: string, enum: [active, hidden, draft], default: active }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    CreatePin:
+      type: object
+      required: [lat, lng, layer, tag, visibility]
+      properties:
+        lat: { type: number }
+        lng: { type: number }
+        layer: { $ref: '#/components/schemas/LayerKey' }
+        tag: { type: string }
+        note: { type: string }
+        visibility: { $ref: '#/components/schemas/Visibility' }
+        group_id: { type: string }
+    UpdatePin:
+      type: object
+      properties:
+        tag: { type: string }
+        note: { type: string }
+        visibility: { $ref: '#/components/schemas/Visibility' }
+        status: { type: string, enum: [active, hidden, draft] }
+
+  parameters:
+    BBox:
+      in: query
+      name: bbox
+      description: 左下経度,左下緯度,右上経度,右上緯度
+      schema: { type: string, example: "132.1,34.1,132.5,34.4" }
+    Since:
+      in: query
+      name: since
+      schema: { type: string, format: date-time }
+    Until:
+      in: query
+      name: until
+      schema: { type: string, format: date-time }
+    Layer:
+      in: query
+      name: layer
+      schema: { $ref: '#/components/schemas/LayerKey' }
+    Tag:
+      in: query
+      name: tag
+      schema: { type: string }
+    Page:
+      in: query
+      name: page
+      schema: { type: integer, minimum: 1, default: 1 }
+    PageSize:
+      in: query
+      name: page_size
+      schema: { type: integer, minimum: 1, maximum: 200, default: 100 }
+
+paths:
+  /pins:
+    get:
+      summary: List pins
+      parameters:
+        - $ref: '#/components/parameters/BBox'
+        - $ref: '#/components/parameters/Since'
+        - $ref: '#/components/parameters/Until'
+        - $ref: '#/components/parameters/Layer'
+        - $ref: '#/components/parameters/Tag'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Pin' }
+                  page: { type: integer }
+                  page_size: { type: integer }
+                  total: { type: integer }
+    post:
+      summary: Create pin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreatePin' }
+      responses:
+        '201': { description: Created }
+
+  /pins/{id}:
+    get:
+      summary: Get pin by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Pin' }
+    patch:
+      summary: Update pin
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdatePin' }
+      responses:
+        '200': { description: Updated }
+    delete:
+      summary: Soft delete pin
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '204': { description: No Content }
+
+  /export.csv:
+    get:
+      summary: Export pins as CSV
+      parameters:
+        - $ref: '#/components/parameters/Since'
+        - $ref: '#/components/parameters/Until'
+        - $ref: '#/components/parameters/Layer'
+        - $ref: '#/components/parameters/Tag'
+      responses:
+        '200':
+          description: CSV export
+          content:
+            text/csv:
+              schema: { type: string, format: binary }
