@@ -1,0 +1,26 @@
+[
+  {
+    "lat": 34.2291,
+    "lng": 132.5248,
+    "layer": "sumai",
+    "tag": "akiya_hint",
+    "note": "郵便受けが満杯",
+    "visibility": "group"
+  },
+  {
+    "lat": 34.2304,
+    "lng": 132.5202,
+    "layer": "kurashi",
+    "tag": "gomi_basho",
+    "note": "第2・第4水曜",
+    "visibility": "public"
+  },
+  {
+    "lat": 34.2333,
+    "lng": 132.5280,
+    "layer": "asobi",
+    "tag": "keshiki",
+    "note": "夕日が最高",
+    "visibility": "personal"
+  }
+]
