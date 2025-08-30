@@ -29,7 +29,7 @@ export const LayerTabs: React.FC<LayerTabsProps> = ({ value, onChange }) => {
   const layers: LayerKey[] = ['sumai', 'kurashi', 'manabi', 'asobi', 'other'];
   
   return (
-    <div className="flex bg-white border-t border-gray-200 overflow-x-auto">
+    <div className="flex bg-white overflow-x-auto" style={{ minHeight: '60px' }}>
       {layers.map((layer) => (
         <button
           key={layer}
@@ -41,7 +41,7 @@ export const LayerTabs: React.FC<LayerTabsProps> = ({ value, onChange }) => {
               : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }
           `}
-          style={{ minHeight: '44px' }}
+          style={{ minHeight: '60px' }}
         >
           <div className="flex flex-col items-center gap-1">
             <span className="text-lg">{layerShapes[layer]}</span>

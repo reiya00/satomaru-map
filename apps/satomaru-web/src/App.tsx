@@ -161,7 +161,7 @@ function App() {
         <h1 className="text-xl font-semibold text-gray-900">{t('app.title')}</h1>
       </header>
       
-      <div className="flex-1 relative">
+      <div className="flex-1 relative" style={{ paddingBottom: '140px' }}>
         <MapCanvas
           pins={pins}
           selectedTag={state.selectedTag}
@@ -170,7 +170,7 @@ function App() {
         />
       </div>
       
-      <div className="bg-white">
+      <div className="bg-white fixed bottom-0 left-0 right-0 z-10 border-t border-gray-200">
         <LayerTabs
           value={state.selectedLayer}
           onChange={handleLayerChange}

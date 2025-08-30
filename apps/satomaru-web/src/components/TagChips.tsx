@@ -28,7 +28,7 @@ export const TagChips: React.FC<TagChipsProps> = ({ layer, value, onSelect }) =>
   const tags = tagData.tags[layer] || [];
   
   return (
-    <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
+    <div className="px-4 py-3 bg-gray-50 border-t border-gray-200" style={{ minHeight: '80px' }}>
       <div className="flex gap-2 overflow-x-auto pb-2">
         {tags.map((tag) => (
           <button
