@@ -25,3 +25,11 @@
   }
 }
 
+/* Global: 1画面レイアウト（スクロールなし） */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+#root { position: relative; }
+
